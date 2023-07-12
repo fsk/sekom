@@ -5,13 +5,11 @@ import lombok.Data;
 
 @Data
 public class BankDto {
-
     String bankName;
 
-    public BankDto convertToDTO(Bank bank) {
+    public static BankDto convertToDTO(Bank bank) {
         BankDto dto = new BankDto();
         dto.setBankName(bank.getBankName());
         return dto;
     }
-
 }

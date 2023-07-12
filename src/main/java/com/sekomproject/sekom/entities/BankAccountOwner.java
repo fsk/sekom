@@ -1,11 +1,12 @@
 package com.sekomproject.sekom.entities;
 
+import com.fasterxml.jackson.annotation.JsonIdentityInfo;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
+import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 import jakarta.persistence.*;
 import lombok.*;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Objects;
+import java.util.*;
 
 @Entity
 @Table
@@ -14,6 +15,9 @@ import java.util.Objects;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
+@JsonIdentityInfo(
+        generator = ObjectIdGenerators.PropertyGenerator.class,
+        property = "id")
 public class BankAccountOwner extends MyMappedSuperClass {
 
     @Id
@@ -35,24 +39,13 @@ public class BankAccountOwner extends MyMappedSuperClass {
     @Column(name = "identity_number", nullable = false, unique = true, updatable = false, length = 11)
     private String identityNumber;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "bank_id")
-    private Bank bank;
+    @ManyToMany(cascade = CascadeType.ALL)
+    @JoinTable(name = "bank_account_owner_banks",
+            joinColumns = @JoinColumn(name = "bank_account_owner_id"),
+            inverseJoinColumns = @JoinColumn(name = "bank_id"))
+    private Set<Bank> banks = new HashSet<>();
 
     @OneToMany(mappedBy = "bankAccountOwner", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<BankAccount> accounts = new ArrayList<>();
 
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-        if (!super.equals(o)) return false;
-        BankAccountOwner that = (BankAccountOwner) o;
-        return Objects.equals(id, that.id) && Objects.equals(firstName, that.firstName) && Objects.equals(lastName, that.lastName) && Objects.equals(email, that.email) && Objects.equals(phoneNumber, that.phoneNumber) && Objects.equals(identityNumber, that.identityNumber) && Objects.equals(bank, that.bank) && Objects.equals(accounts, that.accounts);
-    }
-
-    @Override
-    public int hashCode() {
-        return Objects.hash(super.hashCode(), id, firstName, lastName, email, phoneNumber, identityNumber, bank, accounts);
-    }
 }
