@@ -7,10 +7,7 @@ import com.sekomproject.sekom.util.Response;
 import com.sekomproject.sekom.util.SuccessMessages;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping(value = "/bank")
@@ -26,6 +23,16 @@ public class BankController {
                               HttpStatus.CREATED.value(),
                               SuccessMessages.CREATE_NEW_BANK,
                               new BankDto().convertToDTO(newBank));
+    }
+
+    @DeleteMapping("/{bankName}")
+    public Response<?> deleteBank(@PathVariable(value = "bankName") String bankName) {
+        bankService.deleteBank(bankName);
+        return new Response<>(
+                HttpStatus.OK,
+                HttpStatus.OK.value(),
+                SuccessMessages.DELETE_BANK
+                );
     }
 
 }

@@ -1,11 +1,12 @@
 package com.sekomproject.sekom.entities;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIdentityInfo;
+import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 import jakarta.persistence.*;
 import lombok.*;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Objects;
+import java.util.*;
 
 @Entity
 @Table
@@ -14,6 +15,9 @@ import java.util.Objects;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
+@JsonIdentityInfo(
+        generator = ObjectIdGenerators.PropertyGenerator.class,
+        property = "id")
 public class Bank extends MyMappedSuperClass {
 
     @Id
@@ -23,20 +27,7 @@ public class Bank extends MyMappedSuperClass {
     @Column(name = "bank_name", unique = true)
     private String bankName;
 
-    @OneToMany(mappedBy = "bank", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<BankAccountOwner> owners = new ArrayList<>();
+    @ManyToMany(mappedBy = "banks")
+    private Set<BankAccountOwner> bankAccountOwners = new HashSet<>();
 
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-        if (!super.equals(o)) return false;
-        Bank bank = (Bank) o;
-        return Objects.equals(id, bank.id) && Objects.equals(bankName, bank.bankName) && Objects.equals(owners, bank.owners);
-    }
-
-    @Override
-    public int hashCode() {
-        return Objects.hash(super.hashCode(), id, bankName, owners);
-    }
 }

@@ -23,6 +23,12 @@ public class Response<T> {
     private Map<Object, Object> errorInfoMap;
 
 
+    public Response(HttpStatus httpStatus, Integer statusCode, String message) {
+        this.httpStatus = httpStatus;
+        this.statusCode = statusCode;
+        this.message = message;
+    }
+
     public Response(HttpStatus httpStatus, Integer statusCode, String message, T data) {
         this.httpStatus = httpStatus;
         this.statusCode = statusCode;
