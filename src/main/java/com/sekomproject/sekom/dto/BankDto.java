@@ -7,7 +7,7 @@ import lombok.Data;
 public class BankDto {
     String bankName;
 
-    public static BankDto convertToDTO(Bank bank) {
+    public BankDto convertToDTO(Bank bank) {
         BankDto dto = new BankDto();
         dto.setBankName(bank.getBankName());
         return dto;

@@ -9,8 +9,8 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.Collections;
 import java.util.Set;
+import java.util.UUID;
 import java.util.stream.Collectors;
 
 @Service
@@ -28,17 +28,13 @@ public class BankAccountOwnerService {
             Bank existingBank = bankRepository.findByBankName(bankName)
                     .orElseThrow(() -> new BankNotFoundException(bankName));
             existingBank.getBankAccountOwners().add(bankAccountOwner);
-            //bankRepository.saveAndFlush(existingBank);
             return existingBank;
         }).collect(Collectors.toSet());
 
         bankAccountOwner.setBanks(banks);
-        BankAccountOwner savedBankAccountOwner = bankAccountOwnerRepository.save(bankAccountOwner);
-        banks.forEach(bank -> {
-            bank.getBankAccountOwners().add(savedBankAccountOwner);
-            bankRepository.save(bank);
-        });
-        return savedBankAccountOwner;
+        bankAccountOwner.setUniqueAccountOwnerNumber(UUID.randomUUID());
+        return bankAccountOwnerRepository.save(bankAccountOwner);
+
     }
 
 }
