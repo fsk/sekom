@@ -1,7 +1,6 @@
 package com.sekomproject.sekom.entities;
 
 import com.fasterxml.jackson.annotation.JsonIdentityInfo;
-import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 import jakarta.persistence.*;
 import lombok.*;
@@ -38,6 +37,9 @@ public class BankAccountOwner extends MyMappedSuperClass {
 
     @Column(name = "identity_number", nullable = false, unique = true, updatable = false, length = 11)
     private String identityNumber;
+
+    @Column(name = "unique_account_owner_number")
+    private UUID uniqueAccountOwnerNumber;
 
     @ManyToMany(cascade = CascadeType.ALL)
     @JoinTable(name = "bank_account_owner_banks",

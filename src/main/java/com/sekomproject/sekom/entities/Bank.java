@@ -1,6 +1,5 @@
 package com.sekomproject.sekom.entities;
 
-import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonIdentityInfo;
 import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 import jakarta.persistence.*;
@@ -29,5 +28,8 @@ public class Bank extends MyMappedSuperClass {
 
     @ManyToMany(mappedBy = "banks")
     private Set<BankAccountOwner> bankAccountOwners = new HashSet<>();
+
+    @OneToMany(mappedBy = "bank", cascade = CascadeType.ALL)
+    private Set<BankAccount> bankAccounts = new HashSet<>();
 
 }

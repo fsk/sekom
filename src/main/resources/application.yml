@@ -6,10 +6,11 @@ spring:
     driverClassName: org.postgresql.Driver
   jpa:
     hibernate:
-      ddlAuto: update
+      ddlAuto: create-drop
     showSql: true
     properties:
       hibernate:
         format_sql: true
     database: postgresql
     databasePlatform: org.hibernate.dialect.PostgreSQLDialect
+#create-drop

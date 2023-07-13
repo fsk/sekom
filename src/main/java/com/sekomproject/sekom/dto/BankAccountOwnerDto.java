@@ -30,7 +30,6 @@ public class BankAccountOwnerDto {
 
     private BankDto convertToBankDto(Bank bank) {
         BankDto bankDto = new BankDto();
-        bankDto.convertToDTO(bank);
-        return bankDto;
+        return bankDto.convertToDTO(bank);
     }
 }
