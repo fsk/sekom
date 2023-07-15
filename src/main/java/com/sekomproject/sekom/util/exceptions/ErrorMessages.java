@@ -22,4 +22,6 @@ public class ErrorMessages {
     public static final String INSUFFICIENT_BALANCE = "Insufficient Balance";
 
     public static final String EMAIL_IS_NOT_VALID = "This Email is Not Valid.!";
+
+    public static final String BANK_AND_BANK_ACCOUNT_DONT_MATCH = "This Account Number Does not Belong to This Bank";
 }

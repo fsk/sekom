@@ -23,10 +23,4 @@ public class BankService {
         bankRepository.deleteById(bank.getId());
     }
 
-//    public List<Bank> bankListFromAccountOwner(UUID uniqueAccountOwnerNumber) {
-//
-//        return bankRepository
-//                .findByBankAccountOwnersUniqueAccountOwnerNumber(uniqueAccountOwnerNumber);
-//
-//    }
 }

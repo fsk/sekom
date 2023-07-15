@@ -91,6 +91,11 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
         return getResponseResponseEntity(ex.getExtMsg(), HttpStatus.BAD_REQUEST);
     }
 
+    @ExceptionHandler(BankAndAccountNumberMatchException.class)
+    public ResponseEntity<Response<?>> handleMethodArgumentNotValid(BankAndAccountNumberMatchException ex) {
+        return getResponseResponseEntity(ex.getExtMsg(), HttpStatus.BAD_REQUEST);
+    }
+
 
     private Map<Object, Object> createResponse() {
         HttpServletRequest currentRequest = RequestInterceptor.getCurrentRequest();

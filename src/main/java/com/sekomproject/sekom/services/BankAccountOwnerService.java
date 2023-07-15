@@ -3,9 +3,7 @@ package com.sekomproject.sekom.services;
 
 import com.sekomproject.sekom.entities.BankAccountOwner;
 import com.sekomproject.sekom.entities.CommunicationInformation;
-import com.sekomproject.sekom.repositories.CommunicationInformationRepository;
 import com.sekomproject.sekom.repositories.BankAccountOwnerRepository;
-import com.sekomproject.sekom.repositories.BankRepository;
 import com.sekomproject.sekom.util.exceptions.EmailValidationException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;

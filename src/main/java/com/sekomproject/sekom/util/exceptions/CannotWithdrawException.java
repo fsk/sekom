@@ -1,8 +1,5 @@
 package com.sekomproject.sekom.util.exceptions;
 
-
-import lombok.RequiredArgsConstructor;
-
 import java.math.BigDecimal;
 
 public class CannotWithdrawException extends RuntimeException {

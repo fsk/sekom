@@ -6,10 +6,7 @@ import com.sekomproject.sekom.entities.BankAccountOwner;
 import com.sekomproject.sekom.repositories.BankAccountOwnerRepository;
 import com.sekomproject.sekom.repositories.BankAccountRepository;
 import com.sekomproject.sekom.repositories.BankRepository;
-import com.sekomproject.sekom.util.exceptions.BankAccountNotFoundException;
-import com.sekomproject.sekom.util.exceptions.BankAccountOwnerNotFoundException;
-import com.sekomproject.sekom.util.exceptions.BankNotFoundException;
-import com.sekomproject.sekom.util.exceptions.CannotWithdrawException;
+import com.sekomproject.sekom.util.exceptions.*;
 import com.sekomproject.sekom.util.operations.OperationRequest;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -51,6 +48,7 @@ public class BankAccountService {
 
     @Transactional(isolation = Isolation.SERIALIZABLE)
     public BankAccount withdrawalOperation(OperationRequest request) {
+        accountAndBankValidation(request);
         BigDecimal balance = request.getBankAccount().getBalance();
         BigDecimal totalBalanceByOwnerUUID = getBigDecimal(request);
         if (totalBalanceByOwnerUUID.compareTo(balance) == -1) {
@@ -66,6 +64,7 @@ public class BankAccountService {
 
     @Transactional(isolation = Isolation.SERIALIZABLE)
     public BankAccount depositOperation(OperationRequest request) {
+        accountAndBankValidation(request);
         BigDecimal totalBalanceByOwnerUUID = getBigDecimal(request);
         BigDecimal newBalance = totalBalanceByOwnerUUID.add(request.getBankAccount().getBalance());
 
@@ -118,6 +117,18 @@ public class BankAccountService {
                 .orElseThrow(() -> new BankAccountNotFoundException(accountNumber));
 
     }
+
+    private void accountAndBankValidation(OperationRequest request) {
+
+        String accountNumber = request.getBankAccount().getAccountNumber();
+        String bankName = request.getBank().getBankName();
+
+        if (!accountNumber.substring(0,2).equals(bankName.substring(0,2))) {
+            throw new BankAndAccountNumberMatchException(bankName, accountNumber);
+        }
+
+    }
+
 
 
 }

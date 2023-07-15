@@ -2,7 +2,6 @@ package com.sekomproject.sekom.dto;
 
 import com.sekomproject.sekom.entities.Bank;
 import com.sekomproject.sekom.entities.BankAccount;
-import com.sekomproject.sekom.entities.BankAccountOwner;
 import lombok.Data;
 
 import java.math.BigDecimal;
