@@ -20,4 +20,6 @@ public class ErrorMessages {
     public static final String SERVER_ERROR = "SERVER ERROR.!";
 
     public static final String INSUFFICIENT_BALANCE = "Insufficient Balance";
+
+    public static final String EMAIL_IS_NOT_VALID = "This Email is Not Valid.!";
 }

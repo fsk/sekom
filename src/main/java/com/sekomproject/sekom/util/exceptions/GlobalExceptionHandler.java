@@ -86,6 +86,11 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
 
     }
 
+    @ExceptionHandler(EmailValidationException.class)
+    public ResponseEntity<Response<?>> handleMethodArgumentNotValid(EmailValidationException ex) {
+        return getResponseResponseEntity(ex.getExtMsg(), HttpStatus.BAD_REQUEST);
+    }
+
 
     private Map<Object, Object> createResponse() {
         HttpServletRequest currentRequest = RequestInterceptor.getCurrentRequest();
