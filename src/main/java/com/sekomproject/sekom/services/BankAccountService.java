@@ -9,6 +9,7 @@ import com.sekomproject.sekom.repositories.BankRepository;
 import com.sekomproject.sekom.util.exceptions.BankAccountNotFoundException;
 import com.sekomproject.sekom.util.exceptions.BankAccountOwnerNotFoundException;
 import com.sekomproject.sekom.util.exceptions.BankNotFoundException;
+import com.sekomproject.sekom.util.exceptions.CannotWithdrawException;
 import com.sekomproject.sekom.util.operations.OperationRequest;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -48,28 +49,42 @@ public class BankAccountService {
         return bankAccountRepository.save(bankAccount);
     }
 
+    @Transactional(isolation = Isolation.SERIALIZABLE)
     public BankAccount withdrawalOperation(OperationRequest request) {
-        return null;
+        BigDecimal balance = request.getBankAccount().getBalance();
+        BigDecimal totalBalanceByOwnerUUID = getBigDecimal(request);
+        if (totalBalanceByOwnerUUID.compareTo(balance) == -1) {
+            throw new CannotWithdrawException(balance, totalBalanceByOwnerUUID);
+        }
+        BigDecimal newBalance = totalBalanceByOwnerUUID.subtract(balance);
+        BankAccount bankAccount = request.getBankAccount();
+        Optional<BankAccount> byAccountNumber = bankAccountRepository.findByAccountNumber(bankAccount.getAccountNumber());
+        byAccountNumber.get().setBalance(newBalance);
+
+        return bankAccountRepository.save(byAccountNumber.get());
     }
 
     @Transactional(isolation = Isolation.SERIALIZABLE)
     public BankAccount depositOperation(OperationRequest request) {
-        UUID uniqueAccountOwnerNumber = request.getBankAccountOwner().getUniqueAccountOwnerNumber();
-        String bankName = request.getBank().getBankName();
-        String accountNumber = request.getBankAccount().getAccountNumber();
-        depositValidation(uniqueAccountOwnerNumber, bankName, accountNumber);
-        BigDecimal totalBalanceByOwnerUUID = bankAccountRepository
-                .getTotalBalanceByOwnerUUIDAndBankName(uniqueAccountOwnerNumber, bankName, accountNumber);
+        BigDecimal totalBalanceByOwnerUUID = getBigDecimal(request);
         BigDecimal newBalance = totalBalanceByOwnerUUID.add(request.getBankAccount().getBalance());
 
         BankAccount bankAccount = request.getBankAccount();
-
 
         Optional<BankAccount> byAccountNumber = bankAccountRepository.findByAccountNumber(bankAccount.getAccountNumber());
         byAccountNumber.get().setBalance(newBalance);
 
         return bankAccountRepository.save(byAccountNumber.get());
 
+    }
+
+    private BigDecimal getBigDecimal(OperationRequest request) {
+        UUID uniqueAccountOwnerNumber = request.getBankAccountOwner().getUniqueAccountOwnerNumber();
+        String bankName = request.getBank().getBankName();
+        String accountNumber = request.getBankAccount().getAccountNumber();
+        operationValidation(uniqueAccountOwnerNumber, bankName, accountNumber);
+        return bankAccountRepository
+                .getTotalBalanceByOwnerUUIDAndBankName(uniqueAccountOwnerNumber, bankName, accountNumber);
     }
 
     public List<Bank> bankListFromAccountOwner(String identityNumber) {
@@ -88,7 +103,7 @@ public class BankAccountService {
         return res.toString();
     }
 
-    private void depositValidation(UUID uniqueAccountOwnerNumber, String bankName, String accountNumber) {
+    private void operationValidation(UUID uniqueAccountOwnerNumber, String bankName, String accountNumber) {
 
         bankAccountOwnerRepository
                 .findByUniqueAccountOwnerNumber(uniqueAccountOwnerNumber)

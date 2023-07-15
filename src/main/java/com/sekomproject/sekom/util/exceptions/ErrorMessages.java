@@ -16,4 +16,8 @@ public class ErrorMessages {
             """;
 
     public static final String BANK_ACCOUNT_NOT_FOUND = "Bank Account Not Found.!";
+
+    public static final String SERVER_ERROR = "SERVER ERROR.!";
+
+    public static final String INSUFFICIENT_BALANCE = "Insufficient Balance";
 }

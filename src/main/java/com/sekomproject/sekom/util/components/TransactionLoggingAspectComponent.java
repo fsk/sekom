@@ -8,16 +8,10 @@ import com.sekomproject.sekom.repositories.TransactionRepository;
 import com.sekomproject.sekom.util.operations.OperationRequest;
 import lombok.RequiredArgsConstructor;
 import org.aspectj.lang.ProceedingJoinPoint;
-import org.aspectj.lang.annotation.After;
 import org.aspectj.lang.annotation.Around;
 import org.aspectj.lang.annotation.Aspect;
 import org.aspectj.lang.annotation.Pointcut;
 import org.springframework.stereotype.Component;
-import org.springframework.transaction.annotation.Propagation;
-import org.springframework.transaction.annotation.Transactional;
-
-import java.lang.module.ModuleDescriptor;
-import java.util.Optional;
 
 
 @Component
@@ -39,18 +33,11 @@ public class TransactionLoggingAspectComponent {
         System.out.println("Before executing method: " + joinPoint.getSignature());
 
         Object result = joinPoint.proceed();
-
         logging(request);
-
         try {
-
-
-            // İşlem tamamlandıktan sonra...
             System.out.println("After executing method: " + joinPoint.getSignature());
-
             return result;
         } catch (Exception e) {
-            // Hata durumunda...
             System.out.println("Error executing method: " + joinPoint.getSignature());
 
             throw e;
@@ -61,12 +48,9 @@ public class TransactionLoggingAspectComponent {
     public void logging(OperationRequest request) {
         BankAccount bankAccountFromRequest = request.getBankAccount();
         BankAccountOwner bankAccountOwnerFromRequest = request.getBankAccountOwner();
-
         Bank byBankName = bankRepository.findByBankName(request.getBank().getBankName()).get();
-
         BankAccount byAccountNumber = bankAccountRepository.findByAccountNumber(bankAccountFromRequest.getAccountNumber())
                 .get();
-
         BankAccountOwner bankAccountOwner = bankAccountOwnerRepository
                 .findByUniqueAccountOwnerNumber(bankAccountOwnerFromRequest.getUniqueAccountOwnerNumber()).get();
 

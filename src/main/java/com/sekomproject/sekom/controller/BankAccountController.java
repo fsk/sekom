@@ -7,6 +7,7 @@ import com.sekomproject.sekom.entities.TransactionType;
 import com.sekomproject.sekom.services.BankAccountService;
 import com.sekomproject.sekom.util.Response;
 import com.sekomproject.sekom.util.SuccessMessages;
+import com.sekomproject.sekom.util.exceptions.ErrorMessages;
 import com.sekomproject.sekom.util.operations.OperationRequest;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -25,7 +26,8 @@ public class BankAccountController {
     @PostMapping("/")
     public Response<BankAccountDto> createBankAccount(@RequestBody BankAccount bankAccount) {
         BankAccount newBankAccount = bankAccountService.createBankAccount(bankAccount);
-        return new Response<>(HttpStatus.CREATED,
+        return new Response<>(
+                HttpStatus.CREATED,
                 HttpStatus.CREATED.value(),
                 SuccessMessages.CREATE_NEW_BANK,
                 new BankAccountDto().convertToDTO(newBankAccount));
@@ -40,14 +42,23 @@ public class BankAccountController {
             return new Response<>(
                     HttpStatus.OK,
                     HttpStatus.OK.value(),
-                    SuccessMessages.WITHDRAW,
+                    SuccessMessages.DEPOSIT,
                     new BankAccountDto().convertToDTO(bankAccount)
                     );
         } else if (operationTpe.equals(TransactionType.WITHDRAWAL)) {
-            bankAccount = bankAccountService.depositOperation(request);
+            bankAccount = bankAccountService.withdrawalOperation(request);
+            return new Response<>(
+                    HttpStatus.OK,
+                    HttpStatus.OK.value(),
+                    SuccessMessages.DEPOSIT,
+                    new BankAccountDto().convertToDTO(bankAccount)
+            );
         } else {
-
+            return new Response<>(
+                    HttpStatus.INTERNAL_SERVER_ERROR,
+                    HttpStatus.INTERNAL_SERVER_ERROR.value(),
+                    ErrorMessages.SERVER_ERROR
+            );
         }
-        return new Response<>();
     }
 }

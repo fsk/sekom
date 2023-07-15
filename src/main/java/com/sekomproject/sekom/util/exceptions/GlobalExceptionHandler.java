@@ -19,16 +19,7 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
 
     @ExceptionHandler(MissingFieldException.class)
     public ResponseEntity<Response<?>> handleMethodArgumentNotValid(MissingFieldException ex) {
-        String errorMessage = ex.getExMsg();
-        Map<Object, Object> errorMap = createResponse();
-        Response<String> response = new Response<>(
-                HttpStatus.BAD_REQUEST,
-                HttpStatus.BAD_REQUEST.value(),
-                errorMessage,
-                LocalDateTime.now(),
-                errorMap
-        );
-        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(response);
+        return getResponseResponseEntity(ex.getExMsg(), HttpStatus.BAD_REQUEST);
     }
 
     @ExceptionHandler(DataIntegrityViolationException.class)
@@ -74,54 +65,24 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
 
     @ExceptionHandler(BankNotFoundException.class)
     public ResponseEntity<Response<?>> handleMethodArgumentNotValid(BankNotFoundException ex) {
-        String errorMessage = ex.getExMsg();
-
-        Map<Object, Object> errorMap = createResponse();
-
-        Response<String> response = new Response<>(
-                HttpStatus.NOT_FOUND,
-                HttpStatus.NOT_FOUND.value(),
-                errorMessage,
-                LocalDateTime.now(),
-                errorMap
-        );
-
-        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(response);
+        return getResponseResponseEntity(ex.getExMsg(), HttpStatus.NOT_FOUND);
     }
 
     @ExceptionHandler(BankAccountOwnerNotFoundException.class)
     public ResponseEntity<Response<?>> handleMethodArgumentNotValid(BankAccountOwnerNotFoundException ex) {
-        String errorMessage = ex.getExMsgUniqueBankAccountOwnerKey();
-
-        Map<Object, Object> errorMap = createResponse();
-
-        Response<String> response = new Response<>(
-                HttpStatus.NOT_FOUND,
-                HttpStatus.NOT_FOUND.value(),
-                errorMessage,
-                LocalDateTime.now(),
-                errorMap
-        );
-
-        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(response);
+        return getResponseResponseEntity(ex.getExMsgUniqueBankAccountOwnerKey(), HttpStatus.NOT_FOUND);
 
     }
 
     @ExceptionHandler(BankAccountNotFoundException.class)
     public ResponseEntity<Response<?>> handleMethodArgumentNotValid(BankAccountNotFoundException ex) {
-        String errorMessage = ex.getExtMsg();
+        return getResponseResponseEntity(ex.getExtMsg(), HttpStatus.NOT_FOUND);
 
-        Map<Object, Object> errorMap = createResponse();
+    }
 
-        Response<String> response = new Response<>(
-                HttpStatus.NOT_FOUND,
-                HttpStatus.NOT_FOUND.value(),
-                errorMessage,
-                LocalDateTime.now(),
-                errorMap
-        );
-
-        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(response);
+    @ExceptionHandler(CannotWithdrawException.class)
+    public ResponseEntity<Response<?>> handleMethodArgumentNotValid(CannotWithdrawException ex) {
+        return getResponseResponseEntity(ex.getExMsg(), HttpStatus.BAD_REQUEST);
 
     }
 
@@ -139,6 +100,19 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
         }
 
         return errorMap;
+    }
+
+    private ResponseEntity<Response<?>> getResponseResponseEntity(String ex, HttpStatus badRequest) {
+        String errorMessage = ex;
+        Map<Object, Object> errorMap = createResponse();
+        Response<String> response = new Response<>(
+                badRequest,
+                badRequest.value(),
+                errorMessage,
+                LocalDateTime.now(),
+                errorMap
+        );
+        return ResponseEntity.status(badRequest).body(response);
     }
 
 }
