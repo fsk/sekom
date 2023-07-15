@@ -6,6 +6,7 @@ import com.sekomproject.sekom.entities.BankAccountOwner;
 import com.sekomproject.sekom.repositories.BankAccountOwnerRepository;
 import com.sekomproject.sekom.repositories.BankAccountRepository;
 import com.sekomproject.sekom.repositories.BankRepository;
+import com.sekomproject.sekom.util.exceptions.BankAccountNotFoundException;
 import com.sekomproject.sekom.util.exceptions.BankAccountOwnerNotFoundException;
 import com.sekomproject.sekom.util.exceptions.BankNotFoundException;
 import com.sekomproject.sekom.util.operations.OperationRequest;
@@ -54,13 +55,20 @@ public class BankAccountService {
     @Transactional(isolation = Isolation.SERIALIZABLE)
     public BankAccount depositOperation(OperationRequest request) {
         UUID uniqueAccountOwnerNumber = request.getBankAccountOwner().getUniqueAccountOwnerNumber();
-        BigDecimal totalBalanceByOwnerUUID = bankAccountRepository.getTotalBalanceByOwnerUUIDAndBankName(uniqueAccountOwnerNumber, request.getBank().getBankName());
-        BigDecimal newBalance = totalBalanceByOwnerUUID.multiply(request.getBankAccount().getBalance());
+        String bankName = request.getBank().getBankName();
+        String accountNumber = request.getBankAccount().getAccountNumber();
+        depositValidation(uniqueAccountOwnerNumber, bankName, accountNumber);
+        BigDecimal totalBalanceByOwnerUUID = bankAccountRepository
+                .getTotalBalanceByOwnerUUIDAndBankName(uniqueAccountOwnerNumber, bankName, accountNumber);
+        BigDecimal newBalance = totalBalanceByOwnerUUID.add(request.getBankAccount().getBalance());
 
         BankAccount bankAccount = request.getBankAccount();
-        bankAccount.setBalance(newBalance);
 
-        return bankAccountRepository.save(bankAccount);
+
+        Optional<BankAccount> byAccountNumber = bankAccountRepository.findByAccountNumber(bankAccount.getAccountNumber());
+        byAccountNumber.get().setBalance(newBalance);
+
+        return bankAccountRepository.save(byAccountNumber.get());
 
     }
 
@@ -80,6 +88,21 @@ public class BankAccountService {
         return res.toString();
     }
 
+    private void depositValidation(UUID uniqueAccountOwnerNumber, String bankName, String accountNumber) {
+
+        bankAccountOwnerRepository
+                .findByUniqueAccountOwnerNumber(uniqueAccountOwnerNumber)
+                .orElseThrow(() -> new BankAccountOwnerNotFoundException(uniqueAccountOwnerNumber));
+
+        bankRepository
+                .findByBankName(bankName)
+                .orElseThrow(() -> new BankAccountOwnerNotFoundException(bankName));
+
+        bankAccountRepository
+                .findByAccountNumber(accountNumber)
+                .orElseThrow(() -> new BankAccountNotFoundException(accountNumber));
+
+    }
 
 
 }

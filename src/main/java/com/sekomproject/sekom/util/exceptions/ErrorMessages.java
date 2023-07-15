@@ -14,4 +14,6 @@ public class ErrorMessages {
             The unique account owner key that you provided as a parameter could not locate an account owner,
             or the account owner has not yet created a record in any existing bank.
             """;
+
+    public static final String BANK_ACCOUNT_NOT_FOUND = "Bank Account Not Found.!";
 }

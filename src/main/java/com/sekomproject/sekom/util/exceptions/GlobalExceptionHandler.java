@@ -105,8 +105,26 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
 
         return ResponseEntity.status(HttpStatus.NOT_FOUND).body(response);
 
+    }
+
+    @ExceptionHandler(BankAccountNotFoundException.class)
+    public ResponseEntity<Response<?>> handleMethodArgumentNotValid(BankAccountNotFoundException ex) {
+        String errorMessage = ex.getExtMsg();
+
+        Map<Object, Object> errorMap = createResponse();
+
+        Response<String> response = new Response<>(
+                HttpStatus.NOT_FOUND,
+                HttpStatus.NOT_FOUND.value(),
+                errorMessage,
+                LocalDateTime.now(),
+                errorMap
+        );
+
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(response);
 
     }
+
 
     private Map<Object, Object> createResponse() {
         HttpServletRequest currentRequest = RequestInterceptor.getCurrentRequest();
