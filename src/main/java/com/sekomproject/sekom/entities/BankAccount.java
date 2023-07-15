@@ -1,11 +1,11 @@
 package com.sekomproject.sekom.entities;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.persistence.*;
 import lombok.*;
 
 import java.math.BigDecimal;
 import java.util.List;
-import java.util.Objects;
 
 @Entity
 @Table
@@ -14,6 +14,7 @@ import java.util.Objects;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
+@JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
 public class BankAccount extends MyMappedSuperClass {
 
     @Id
@@ -34,17 +35,7 @@ public class BankAccount extends MyMappedSuperClass {
     @JoinColumn(name = "bank_id")
     private Bank bank;
 
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-        if (!super.equals(o)) return false;
-        BankAccount that = (BankAccount) o;
-        return Objects.equals(id, that.id) && Objects.equals(accountNumber, that.accountNumber) && Objects.equals(balance, that.balance) && Objects.equals(bankAccountOwner, that.bankAccountOwner);
-    }
+    @OneToMany(mappedBy = "bankAccount", cascade = CascadeType.ALL)
+    private List<Transaction> transactions;
 
-    @Override
-    public int hashCode() {
-        return Objects.hash(super.hashCode(), id, accountNumber, balance, bankAccountOwner);
-    }
 }

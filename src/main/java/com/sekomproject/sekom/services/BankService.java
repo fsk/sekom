@@ -1,15 +1,11 @@
 package com.sekomproject.sekom.services;
 
 import com.sekomproject.sekom.entities.Bank;
-import com.sekomproject.sekom.repositories.BankAccountOwnerRepository;
 import com.sekomproject.sekom.repositories.BankRepository;
-import com.sekomproject.sekom.util.Response;
 import com.sekomproject.sekom.util.exceptions.BankNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
-import java.util.List;
-import java.util.UUID;
 
 @Service
 @RequiredArgsConstructor
@@ -27,10 +23,10 @@ public class BankService {
         bankRepository.deleteById(bank.getId());
     }
 
-    public List<Bank> bankListFromAccountOwner(UUID uniqueAccountOwnerNumber) {
-
-        return bankRepository
-                .findByBankAccountOwnersUniqueAccountOwnerNumber(uniqueAccountOwnerNumber);
-
-    }
+//    public List<Bank> bankListFromAccountOwner(UUID uniqueAccountOwnerNumber) {
+//
+//        return bankRepository
+//                .findByBankAccountOwnersUniqueAccountOwnerNumber(uniqueAccountOwnerNumber);
+//
+//    }
 }

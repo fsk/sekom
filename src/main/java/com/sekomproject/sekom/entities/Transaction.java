@@ -4,7 +4,7 @@ import jakarta.persistence.*;
 import lombok.*;
 
 import java.math.BigDecimal;
-import java.util.Objects;
+import java.util.UUID;
 
 @Entity
 @Table
@@ -27,19 +27,14 @@ public class Transaction extends MyMappedSuperClass {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "account_id")
-    private BankAccount account;
+    private BankAccount bankAccount;
 
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-        if (!super.equals(o)) return false;
-        Transaction that = (Transaction) o;
-        return Objects.equals(id, that.id) && Objects.equals(amount, that.amount) && type == that.type && Objects.equals(account, that.account);
-    }
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "bank_account_owner_id")
+    private BankAccountOwner bankAccountOwner;
 
-    @Override
-    public int hashCode() {
-        return Objects.hash(super.hashCode(), id, amount, type, account);
-    }
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "bank_id")
+    private Bank bank;
+
 }

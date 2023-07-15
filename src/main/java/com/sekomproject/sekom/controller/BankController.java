@@ -39,16 +39,16 @@ public class BankController {
                 );
     }
 
-    @GetMapping("/{uuid}")
-    public Response<?> getAllBanksFromUniqueAccountOwnerNumber(@PathVariable("uuid") UUID uniqueAccountOwnerNumber) {
-        List<Bank> banks = bankService.bankListFromAccountOwner(uniqueAccountOwnerNumber);
-        boolean res = banks.isEmpty();
-        return new Response<>(
-                res ? HttpStatus.BAD_REQUEST : HttpStatus.OK,
-                res ? HttpStatus.BAD_REQUEST.value() : HttpStatus.OK.value(),
-                res ? ErrorMessages.BANK_ACCOUNT_OWNER_NOT_FOUND : SuccessMessages.ALL_BANKS_FROM_ACCOUNTS_OWNER,
-                res ? null : banks
-        );
-    }
+//    @GetMapping("/{uuid}")
+//    public Response<?> getAllBanksFromUniqueAccountOwnerNumber(@PathVariable("uuid") UUID uniqueAccountOwnerNumber) {
+//        List<Bank> banks = bankService.bankListFromAccountOwner(uniqueAccountOwnerNumber);
+//        boolean res = banks.isEmpty();
+//        return new Response<>(
+//                res ? HttpStatus.BAD_REQUEST : HttpStatus.OK,
+//                res ? HttpStatus.BAD_REQUEST.value() : HttpStatus.OK.value(),
+//                res ? ErrorMessages.BANK_ACCOUNT_OWNER_NOT_FOUND : SuccessMessages.ALL_BANKS_FROM_ACCOUNTS_OWNER,
+//                res ? null : banks
+//        );
+//    }
 
 }

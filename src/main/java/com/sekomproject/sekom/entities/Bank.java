@@ -1,6 +1,7 @@
 package com.sekomproject.sekom.entities;
 
 import com.fasterxml.jackson.annotation.JsonIdentityInfo;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 import jakarta.persistence.*;
 import lombok.*;
@@ -17,6 +18,7 @@ import java.util.*;
 @JsonIdentityInfo(
         generator = ObjectIdGenerators.PropertyGenerator.class,
         property = "id")
+@JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
 public class Bank extends MyMappedSuperClass {
 
     @Id
@@ -26,10 +28,10 @@ public class Bank extends MyMappedSuperClass {
     @Column(name = "bank_name", unique = true)
     private String bankName;
 
-    @ManyToMany(mappedBy = "banks")
-    private Set<BankAccountOwner> bankAccountOwners = new HashSet<>();
-
     @OneToMany(mappedBy = "bank", cascade = CascadeType.ALL)
     private Set<BankAccount> bankAccounts = new HashSet<>();
+
+    @OneToMany(mappedBy = "bank", cascade = CascadeType.ALL)
+    private List<Transaction> transactions;
 
 }

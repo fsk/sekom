@@ -91,7 +91,7 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
 
     @ExceptionHandler(BankAccountOwnerNotFoundException.class)
     public ResponseEntity<Response<?>> handleMethodArgumentNotValid(BankAccountOwnerNotFoundException ex) {
-        String errorMessage = ex.getMessage();
+        String errorMessage = ex.getExMsgUniqueBankAccountOwnerKey();
 
         Map<Object, Object> errorMap = createResponse();
 
