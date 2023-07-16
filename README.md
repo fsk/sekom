@@ -566,5 +566,5 @@ RabbitMQ entegre edilmiştir fakat hata alındığı için projeden kaldırılm�
 * Kod tekrarları mevcuttur.
 * Bazı yerlerde DB'ye fazla kayıt atıldığı için Redis gibi cache aracı kullanılabilirdi.
 * Authentication yapılabilirdi.
-
+* Branch yapiları daha uygun yapılabilrdi.
 
