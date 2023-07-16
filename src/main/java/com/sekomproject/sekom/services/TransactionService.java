@@ -1,9 +1,6 @@
 package com.sekomproject.sekom.services;
 
-import com.sekomproject.sekom.entities.Bank;
-import com.sekomproject.sekom.entities.BankAccount;
-import com.sekomproject.sekom.entities.BankAccountOwner;
-import com.sekomproject.sekom.entities.Transaction;
+import com.sekomproject.sekom.entities.*;
 import com.sekomproject.sekom.repositories.BankAccountOwnerRepository;
 import com.sekomproject.sekom.repositories.BankAccountRepository;
 import com.sekomproject.sekom.repositories.BankRepository;
@@ -29,6 +26,7 @@ public class TransactionService {
 
     public List<Transaction> getTransactionsFromDate(OperationRequest request) {
 
+        TransactionType transactionType = request.getTransactionType();
         String bankName = request.getBank().getBankName();
         String accountNumber = request.getBankAccount().getAccountNumber();
         UUID uniqueAccountOwnerNumber = request.getBankAccountOwner().getUniqueAccountOwnerNumber();
@@ -49,7 +47,7 @@ public class TransactionService {
                 .orElseThrow(() -> new BankAccountOwnerNotFoundException(uniqueAccountOwnerNumber));
 
         return transactionRepository
-                .findAllByOperations(bankAccount.getId(), byBankName.getId(), bankAccountOwner.getId(), request.getDate());
+                .findAllByOperations(transactionType, bankAccount.getId(), byBankName.getId(), bankAccountOwner.getId(), request.getDate());
 
     }
 
