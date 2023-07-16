@@ -18,4 +18,5 @@ public interface BankAccountOwnerRepository extends JpaRepository<BankAccountOwn
 
     Optional<BankAccountOwner> findByIdentityNumber(String identityNumber);
 
+
 }

@@ -6,6 +6,8 @@ import com.sekomproject.sekom.entities.BankAccountOwner;
 import com.sekomproject.sekom.entities.TransactionType;
 import lombok.Data;
 
+import java.util.Date;
+
 @Data
 public class OperationRequest {
 
@@ -13,5 +15,6 @@ public class OperationRequest {
     private BankAccountOwner bankAccountOwner;
     private BankAccount bankAccount;
     private TransactionType transactionType;
+    private Date date;
 
 }
