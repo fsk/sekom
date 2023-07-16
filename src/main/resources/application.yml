@@ -14,3 +14,7 @@ spring:
     database: postgresql
     databasePlatform: org.hibernate.dialect.PostgreSQLDialect
 #create-drop
+
+rabbitmq:
+  exchange: my_exchange
+  routingkey: my_routing_key

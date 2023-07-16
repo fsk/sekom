@@ -5,6 +5,7 @@ import com.sekomproject.sekom.dto.BankAccountDto;
 import com.sekomproject.sekom.entities.BankAccount;
 import com.sekomproject.sekom.entities.TransactionType;
 import com.sekomproject.sekom.services.BankAccountService;
+import com.sekomproject.sekom.services.RabbitMqSender;
 import com.sekomproject.sekom.util.Response;
 import com.sekomproject.sekom.util.SuccessMessages;
 import com.sekomproject.sekom.util.operations.OperationRequest;
@@ -21,6 +22,7 @@ import org.springframework.web.bind.annotation.RestController;
 public class BankAccountController {
 
     private final BankAccountService bankAccountService;
+    private final RabbitMqSender rabbitMqSender;
 
     @PostMapping("/")
     public Response<BankAccountDto> createBankAccount(@RequestBody BankAccount bankAccount) {
@@ -35,6 +37,7 @@ public class BankAccountController {
     public Response<?> postOperation(@RequestBody OperationRequest request) {
         BankAccount bankAccount;
         TransactionType operationTpe = request.getTransactionType();
+        rabbitMqSender.send(request);
         if (operationTpe.equals(TransactionType.DEPOSIT)) {
             bankAccount = bankAccountService.depositOperation(request);
             return new Response<>(
