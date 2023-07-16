@@ -110,7 +110,7 @@ public class BankAccountService {
 
         bankRepository
                 .findByBankName(bankName)
-                .orElseThrow(() -> new BankAccountOwnerNotFoundException(bankName));
+                .orElseThrow(() -> new BankNotFoundException(bankName));
 
         bankAccountRepository
                 .findByAccountNumber(accountNumber)

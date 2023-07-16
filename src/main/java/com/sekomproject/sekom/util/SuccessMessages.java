@@ -8,5 +8,7 @@ public final class SuccessMessages {
     public static final String ALL_BANKS_FROM_ACCOUNTS_OWNER = "All Banks Information From Accounts Owner From Order By Created Date";
     public static final String WITHDRAW = "Withdraw Operation Finished Successfully.!";
     public static final String DEPOSIT = "Deposit Operation Finished Successfully.!";
+    public static final String WITHDRAWAL_HISTORY = "All Withdrawal History";
+    public static final String DEPOSIT_HISTORY = "All Deposit History";
 
 }
