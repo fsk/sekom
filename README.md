@@ -556,6 +556,8 @@ sonuç olarak
 RabbitMQ entegre edilmiştir fakat hata alındığı için projeden kaldırılmıştır.<br>
 "rabbitmq-entegration" branchına commit atılmıştır fakat PR kabul edilmemiştir.</b>
 
+<b>NODE.JS Projesi: https://github.com/fsk/http-requests </b>
+
 <hr>
 
 
